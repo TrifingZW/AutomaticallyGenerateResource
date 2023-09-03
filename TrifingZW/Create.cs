@@ -136,7 +136,10 @@ public class Create
             }
 
             if (pair.Value is string)
-                stringWriter.WriteLine($"public static string {Path.GetFileNameWithoutExtension(pair.Key)}=\"{pair.Value}\";");
+            {
+                string str=(pair.Value as string)!;
+                stringWriter.WriteLine($"public static string {Path.GetFileNameWithoutExtension(pair.Key)}=\"{str[..str.LastIndexOf(".", StringComparison.Ordinal)]}\";");
+            }
         }
     }
 }
