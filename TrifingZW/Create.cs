@@ -36,7 +36,7 @@ public class Create
         StreamWriter stringWriter = File.CreateText(outfile);
         foreach (var file in List)
         {
-            if (!Path.GetExtension(file).Equals(".png") && !Path.GetExtension(file).Equals(".mp3") && !Path.GetExtension(file).Equals(".fx")) continue;
+            if (!Path.GetExtension(file).Equals(".png") && !Path.GetExtension(file).Equals(".mp3") && !Path.GetExtension(file).Equals(".wav") && !Path.GetExtension(file).Equals(".gif") && !Path.GetExtension(file).Equals(".xnb")) continue;
 
             var relativeTo = Directory.GetParent(programFolderPath)?.FullName;
 
@@ -112,7 +112,7 @@ public class Create
 
         if (parts.Length == 1)
         {
-            dict[key] = line.Replace('\\', '/'); 
+            dict[key] = line.Replace('\\', '/');
             return;
         }
 
@@ -135,10 +135,11 @@ public class Create
                 stringWriter.WriteLine("}");
             }
 
-            if (pair.Value is string)
+            if (pair.Value is string str)
             {
-                string str=(pair.Value as string)!;
-                stringWriter.WriteLine($"public static string {Path.GetFileNameWithoutExtension(pair.Key)}=\"{str[..str.LastIndexOf(".", StringComparison.Ordinal)]}\";");
+                var prefix = int.TryParse(Path.GetFileNameWithoutExtension(pair.Key), out _) ? "_" : "";
+                stringWriter.WriteLine(
+                    $"public static string {prefix}{Path.GetFileNameWithoutExtension(pair.Key)}=\"{str[..str.LastIndexOf(".", StringComparison.Ordinal)]}\";");
             }
         }
     }
